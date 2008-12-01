@@ -23,7 +23,8 @@ pod2usage(0) if $option{help};
 my $dev    = $ARGV[0] or pod2usage(1);
 my $output = $ARGV[1] or pod2usage(1);
 
-my $start_t;
+my $elapsed_video = 0;
+my $elapsed_audio = 0;
 
 open my $fh, ">$output" or die $!;
 END { close $fh }
@@ -72,13 +73,14 @@ sub log_other {
             $io->write_u24( $packet->size );
 
             # relative timestamp
-            unless ($start_t) {
-                $start_t = [gettimeofday];
-                $io->write_u32(0);
+            if ($packet->type == 0x08) {
+                $elapsed_audio += $packet->timer;
+                $io->write_u24($elapsed_audio);
+                $io->write_u8(0);
             }
             else {
-                my $t = tv_interval( $start_t, [gettimeofday] );
-                $io->write_u24( int($t*1000) );
+                $elapsed_video += $packet->timer;
+                $io->write_u24($elapsed_video);
                 $io->write_u8(0);
             }
 
