@@ -76,12 +76,12 @@ sub log_other {
             if ($packet->type == 0x08) {
                 $elapsed_audio += $packet->timer;
                 $io->write_u24($elapsed_audio);
-                $io->write_u8(0);
+                $io->write_u8($elapsed_audio>>24);
             }
             else {
                 $elapsed_video += $packet->timer;
                 $io->write_u24($elapsed_video);
-                $io->write_u8(0);
+                $io->write_u8($elapsed_video>>24);
             }
 
             $io->write_u24(0);
