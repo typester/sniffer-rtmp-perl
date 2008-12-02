@@ -203,7 +203,11 @@ sub process_packet {
             if ($packet->type == 0x14 or $packet->type == 0x12) { # invoke or notify
                 my ($method, $id, @args);
                 eval { ($method, $id, @args) = $self->parser->deserialize( $packet->data ) };
-                confess qq{parse error '$@'} if $@;
+                if ($@) {
+                    warn 'parse error';
+                    $io->clear;
+                    return;
+                }
                 $self->dispatch( $type => $dir => $packet, $method, $id, \@args );
             }
             elsif ($packet->type == 0x01) { # chunksize
