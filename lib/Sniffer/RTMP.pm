@@ -52,7 +52,7 @@ sub run {
     my $self = shift;
 
     my $err;
-    my $pcap = pcap_open_live( $self->device, 128000, -1, 500, \$err);
+    my $pcap = pcap_open_live( $self->device, 128000, -1, 0, \$err);
     confess qq{Unable to create packet capture on device "$self->{device}"} unless defined $pcap;
 
     $self->pcap($pcap);
