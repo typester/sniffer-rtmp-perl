@@ -23,7 +23,7 @@ sub log_method {
 
     my $type = $packet->type == 0x14 ? 'invoke' : 'notify';
 
-    print $dir eq 'in' ? '<=' : '>=';
+    print $dir eq 'in' ? '<=' : '=>';
     print " [$type]";
     print " method:$method";
     print " id:$id";
@@ -40,7 +40,7 @@ sub log_other {
 
     return sub {
         my ($dir, $packet) = @_;
-        print $dir eq 'in' ? '<=' : '>=';
+        print $dir eq 'in' ? '<=' : '=>';
         print " [${type}]\n";
     };
 };
