@@ -48,21 +48,24 @@ sub log_other {
 Sniffer::RTMP->new(
     device    => $dev,
     callbacks => {
-        chunk_size         => log_other('chunk_size'),
-        bytes_read         => log_other('bytes_read'),
-        ping               => log_other('ping'),
-        server_bw          => log_other('server_bw'),
-        client_bw          => log_other('client_bw'),
-        audio              => log_other('audio'),
-        video              => log_other('video'),
-        flex_stream        => log_other('flex_stream'),
-        flex_shared_object => log_other('flex_shared_object'),
-        flex_message       => log_other('flex_message'),
-        notify             => \&log_method,
-        shared_object      => log_other('shared_object'),
-        invoke             => \&log_method,
-        flv_data           => log_other('flv_data'),
-        unknown            => log_other('unknown'),
+        notify => \&log_method,
+        invoke => \&log_method,
+        map { $_ => log_other($_) }
+            qw/
+            chunk_size
+            bytes_read
+            ping
+            server_bw
+            client_bw
+            audio
+            video
+            flex_stream
+            flex_shared_object
+            flex_message
+            shared_object
+            flv_data
+            unknown
+            /,
     },
 )->run;
 
