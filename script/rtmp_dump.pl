@@ -12,7 +12,7 @@ use JSON::Syck;
 
 GetOptions(
     \my %option,
-    qw/help/
+    qw/help port=i/
 );
 pod2usage(0) if $option{help};
 
@@ -46,6 +46,7 @@ sub log_other {
 };
 
 Sniffer::RTMP->new(
+    $option{port} ? (filter => "tcp port $option{port}") : (),
     device    => $dev,
     callbacks => {
         notify => \&log_method,
@@ -90,4 +91,3 @@ LICENSE file included with this module.
 =cut
 
 1;
-
